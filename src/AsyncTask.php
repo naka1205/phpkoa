@@ -1,5 +1,5 @@
 <?php
-namespace Koa;
+namespace Naka507\Koa;
 final class AsyncTask implements Async
 {
     public $gen;

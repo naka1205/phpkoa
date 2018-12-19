@@ -1,6 +1,6 @@
 <?php
-namespace Koa;
-use Socket\Server;
+namespace Naka507\Koa;
+use Naka507\Socket\Server;
 
 class Application
 {

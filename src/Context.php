@@ -1,5 +1,5 @@
 <?php
-namespace Koa;
+namespace Naka507\Koa;
 class Context
 {
     public $app;

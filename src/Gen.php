@@ -1,5 +1,5 @@
 <?php
-namespace Koa;
+namespace Naka507\Koa;
 class Gen{
     
     public $isfirst = true;

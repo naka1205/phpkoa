@@ -1,0 +1,56 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "f8910069ce9027c7cbda78e7ef2f702f",
+    "packages": [
+        {
+            "name": "naka1205/phpsocket",
+            "version": "v1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/naka1205/phpsocket.git",
+                "reference": "ba499cd09ec1991cef8c909178b9d0908b82bf65"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/naka1205/phpsocket/zipball/ba499cd09ec1991cef8c909178b9d0908b82bf65",
+                "reference": "ba499cd09ec1991cef8c909178b9d0908b82bf65",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Naka507\\Socket\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "naka507",
+                    "email": "171453643@qq.com"
+                }
+            ],
+            "description": "php socket",
+            "time": "2018-12-19T05:09:19+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": {
+        "php": ">=5.4"
+    },
+    "platform-dev": []
+}

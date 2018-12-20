@@ -2,6 +2,7 @@
 use Naka507\Koa\Context;
 use Naka507\Koa\Syscall;
 use Naka507\Koa\CallCC;
+use Naka507\Koa\Any;
 use Naka507\Koa\AsyncTask;
 
 function spawn()

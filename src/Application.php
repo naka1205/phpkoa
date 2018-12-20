@@ -2,8 +2,6 @@
 namespace Naka507\Koa;
 use Naka507\Socket\Server;
 
-require __DIR__ . '/functions.php';
-
 class Application
 {
     public $httpServer;

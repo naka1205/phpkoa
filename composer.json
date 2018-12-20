@@ -11,11 +11,12 @@
     "license": "MIT",
     "require": {
         "php": ">=5.4",
-        "naka1205/phpsocket": "^1.2"
+        "naka1205/phpsocket": "^1.4"
     },
     "autoload": {
         "psr-4": {
             "Naka507\\Koa\\": "src/"
-        }
+        },
+        "files": ["src/functions.php"]
     }
 }

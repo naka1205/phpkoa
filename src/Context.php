@@ -3,19 +3,13 @@ namespace Naka507\Koa;
 class Context
 {
     public $app;
-    /** @var Request */
     public $request;
-    /** @var Response */
     public $response;
-    /** @var \swoole_http_request */
     public $req;
-    /** @var \swoole_http_response */
     public $res;
     public $state = [];
     public $respond = true;
-    /** @var string */
     public $body;
-    /** @var int */
     public $status;
 
     public function __call($name, $arguments)

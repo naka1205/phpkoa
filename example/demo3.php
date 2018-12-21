@@ -8,8 +8,8 @@ use Naka507\Koa\Timeout;
 use Naka507\Koa\Router;
 
 $app = new Application();
-// $app->υse(new Error());
-// $app->υse(new Timeout(3));
+$app->υse(new Error());
+$app->υse(new Timeout(5));
 
 $router = new Router();
 $router->get('/demo1', function(Context $ctx, $next) {

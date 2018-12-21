@@ -63,6 +63,6 @@ class Response
 
     public function render($file)
     {
-        $this->ctx->body = (yield Template::render($file, $this->ctx->state));
+        $this->ctx->body = (yield (new Template($file))->render($this->ctx->state));
     }
 }

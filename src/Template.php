@@ -256,14 +256,11 @@ class Template {
         return preg_replace("/{(".self::$REG_NAME.")((\-\>(".self::$REG_NAME."))*)?((\|.*?)*)?}/", "", $this->subst($this->getVar(".")));
     }
 
-    public function show() {
-        echo $this->parse();
-    }
-
-    public function render($data=[]) {
+    public static function render($file,$data=[]) {
+        $template = new Template($file);
         foreach ($data as $key => $value) {
-            $this->$key = $value;
+            $template->$key = $value;
         }
-        return $this->parse();
+        return $template->parse();
     }   
 }

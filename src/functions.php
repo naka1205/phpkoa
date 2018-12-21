@@ -4,7 +4,7 @@ use Naka507\Koa\Syscall;
 use Naka507\Koa\CallCC;
 use Naka507\Koa\Any;
 use Naka507\Koa\AsyncTask;
-
+use Naka507\Socket\Timer;
 function spawn()
 {
     $n = func_num_args();
@@ -69,7 +69,6 @@ function race(array $tasks)
         if (empty($tasks)) {
             return null;
         } else {
-            echo "Any\n";
             return new Any($tasks, $parent);
         }
     });
@@ -83,7 +82,6 @@ function all(array $tasks){
         if(empty($tasks)){
             return null;
         }else{
-            echo "All\n";
             return new All($tasks,$parent);
         }
     });
@@ -95,6 +93,16 @@ function timeout($ms)
 
         Timer::add($ms, function() use($k) {
             $k(null, new \Exception("timeout"));
+        },[],false);
+
+    });
+}
+
+function async_sleep($ms){
+    return callcc( function($k) use($ms){
+
+        Timer::add($ms, function() use($k) {
+            $k(null);
         },[],false);
 
     });

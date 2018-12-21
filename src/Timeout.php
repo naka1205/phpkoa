@@ -22,15 +22,12 @@ class Timeout implements Middleware
     {
         yield race([
             callcc(function($k) {
-                echo "Timer callcc $this->timeout\n";
-
-                $this->timerId = Timer::add($this->timeout, function($that) use($k) {
-                    echo "add\n";
-                    $that->timerId = null;
-                    $k(null, $that->exception);
-                },[$this],false);
+                $this->timerId = Timer::add($this->timeout, function() use($k) {
+                    $this->timerId = null;
+                    $k(null, $this->exception);
+                },[],false);
             }),
-            function()use($next){
+            function() use($next) {
                 yield $next;
             }
         ]);

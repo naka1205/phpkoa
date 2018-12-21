@@ -36,8 +36,7 @@ class Router
             $route = $this->handle($this->afterRoutes[$this->requestedMethod]);
             $handled = $route['handled'];
         }
-        echo "handled: $handled\n";
-        echo "status: $ctx->status\n";
+        
         switch ($handled) {
             case 0:
                 // 状态码写入Context
@@ -154,7 +153,7 @@ class Router
         return $method;
     }
 
-    public function set404($fn)
+    public function notFound($fn)
     {
         $this->notFoundCallback = $fn;
     }

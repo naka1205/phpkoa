@@ -69,7 +69,22 @@ function race(array $tasks)
         if (empty($tasks)) {
             return null;
         } else {
+            echo "Any\n";
             return new Any($tasks, $parent);
+        }
+    });
+}
+
+function all(array $tasks){
+
+    $tasks = array_map(__NAMESPACE__."\\await",$tasks);
+
+    return new SysCall(function(AsyncTask $parent) use ($tasks){
+        if(empty($tasks)){
+            return null;
+        }else{
+            echo "All\n";
+            return new All($tasks,$parent);
         }
     });
 }
@@ -77,9 +92,11 @@ function race(array $tasks)
 function timeout($ms)
 {
     return callcc(function($k) use($ms) {
-        swoole_timer_after($ms, function() use($k) {
+
+        Timer::add($ms, function() use($k) {
             $k(null, new \Exception("timeout"));
-        });
+        },[],false);
+
     });
 }
 
@@ -89,6 +106,19 @@ function callcc(callable $fun, $timeout = 0)
         $fun = timeoutWrapper($fun, $timeout);
     }
     return new CallCC($fun);
+}
+
+
+function timeoutWrapper(callable $fun,$ms){
+    return function ($k) use($fun,$ms){
+        $k = once($k);
+        $fun($k);
+
+        Timer::add($ms, function() use($k) {
+            $k(null, new \Exception("timeout"));
+        },[],false);
+
+    };
 }
 
 function getCtx($key, $default = null)

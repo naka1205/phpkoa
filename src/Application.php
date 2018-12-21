@@ -86,9 +86,8 @@ class Application
         if ($ex instanceof HttpException) {
             $status = $ex->status ?: 500;
             $ctx->res->status($status);
-            if ($ex->expose) {
-                $msg = $ex->getMessage();
-            }
+            $msg = $ex->getMessage();
+
         } else {
             $ctx->res->status(500);
         }

@@ -37,7 +37,7 @@ $app->listen(3000);
 
 ```php
 <?php
-require __DIR__ . '/../vendor/autoload.php';
+require __DIR__ . '/vendor/autoload.php';
 
 use Naka507\Koa\Application;
 use Naka507\Koa\Context;

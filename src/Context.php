@@ -27,6 +27,11 @@ class Context
     {
         $this->response->$name = $value;
     }
+ 
+    public function accept($name)
+    {
+        return strpos($this->request->server['http_accept'],$name) === false ?  false : true;
+    }
 
     public function thrοw($status, $message)
     {

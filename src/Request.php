@@ -37,6 +37,8 @@ class Request
                 return isset($this->req->header) ? $this->req->header : [];
             case "files":
                 return isset($this->req->files) ? $this->req->files : [];
+            case "accept":
+                return $this->req->server['http_accept'];
             case "method":
                 return $this->req->server["request_method"];
             case "url":

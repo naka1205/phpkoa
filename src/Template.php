@@ -257,10 +257,35 @@ class Template {
     }
 
     public static function render($file,$data=[]) {
-        $template = new Template($file);
-        foreach ($data as $key => $value) {
-            $template->$key = $value;
+        $tpl = new Template($file);
+        try {
+            foreach ($data as $key => $value) {
+                if ( !is_array($value) ) {
+                    $tpl->$key = $value;
+                    continue;
+                }
+                $bool = false;
+                foreach($value as $ke => $val){
+                    if ( !is_array($val) ) {
+                        $tpl->$ke = $val;
+                    }else{
+                        $bool = true;
+                        foreach ($val as $k => $v) {
+                            $tpl->$k = $v;
+                        }
+                        $tpl->block(strtoupper($key));
+                    } 
+                }
+                if ( !$bool ) {
+                    $tpl->block(strtoupper($key));
+                    continue;
+                }
+            }
+        } catch (\Exception $e){
+
+            return "Template Error!";
+    
         }
-        return $template->parse();
+        return $tpl->parse();
     }   
 }

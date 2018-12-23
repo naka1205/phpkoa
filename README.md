@@ -1,5 +1,9 @@
 PHPKoa 
 =================
+[![Latest Stable Version](https://poser.pugx.org/naka1205/phpkoa/version)](https://packagist.org/packages/naka1205/phpkoa)
+[![Total Downloads](https://poser.pugx.org/naka1205/phpkoa/downloads)](https://packagist.org/packages/naka1205/phpkoa)
+[![License](https://poser.pugx.org/naka1205/phpkoa/license)](https://packagist.org/packages/naka1205/phpkoa)
+
 PHP异步编程: 
 基于 `PHP` 实(chao)现(xi) `NODEJS` web框架 [KOA](https://github.com/koajs/koa) 
 

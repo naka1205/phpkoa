@@ -106,11 +106,85 @@ $router->get('/demo3/(\d+)', function(Context $ctx, $next, $vars) {
 $router->get('/demo4', function(Context $ctx, $next) {
     $ctx->redirect("/demo2");
 });
+
+//RESTful API
+$router->post('/demo3/(\d+)', function(Context $ctx, $next, $vars) {
+    $ctx->status = 200;
+    $ctx->body = "post:demo3={$vars[0]}";
+});
+$router->put('/demo3/(\d+)', function(Context $ctx, $next, $vars) {
+    $ctx->status = 200;
+    $ctx->body = "put:demo3={$vars[0]}";
+});
+$router->delete('/demo3/(\d+)', function(Context $ctx, $next, $vars) {
+    $ctx->status = 200;
+    $ctx->body = "delete:demo3={$vars[0]}";
+});
+
 $app->υse($router->routes());
 
 $app->listen(3000);
 
 ```
+
+```php
+<?php
+//此处已省略 ... 
+
+//此处使用第三方 HTTP 客户端类库，方便测试
+use GuzzleHttp\Client;
+
+$router = new Router();
+
+//路由分组 
+//http://127.0.0.1:5000/curl/get
+//http://127.0.0.1:5000/curl/post
+//http://127.0.0.1:5000/curl/put
+//http://127.0.0.1:5000/curl/delete
+$router->mount('/curl', function() use ($router) {
+
+    $router->get('/get', function( Context $ctx, $next ) {
+        $client = new Client();
+        $r = (yield $client->request('GET', 'http://127.0.0.1:3000/demo3/1'));
+        $ctx->status = $r->getStatusCode();
+        $ctx->body = $r->getBody();
+    });
+
+    $router->get('/post', function(Context $ctx, $next ) {
+        $client = new Client();
+        $r = (yield $client->request('POST', 'http://127.0.0.1:3000/demo3/2'));
+        $ctx->status = $r->getStatusCode();
+        $ctx->body = $r->getBody();
+    });
+
+    $router->get('/put', function( Context $ctx, $next ) {
+        $client = new Client();
+        $r = (yield $client->request('PUT', 'http://127.0.0.1:3000/demo3/3'));
+        $ctx->status = $r->getStatusCode();
+        $ctx->body = $r->getBody();
+    });
+
+    $router->get('/delete', function( Context $ctx, $next ) {
+        $client = new Client();
+        $r = (yield $client->request('DELETE', 'http://127.0.0.1:3000/demo3/4'));
+        $ctx->status = $r->getStatusCode();
+        $ctx->body = $r->getBody();
+    });
+});
+
+// $router->get('/curl/(\w+)', function(Context $ctx, $next, $vars) {
+//     $method = strtoupper($vars[0]);
+//     $client = new Client();
+//     $r = (yield $client->request($method, 'http://127.0.0.1:3000/demo3/123'));
+//     $ctx->status = $r->getStatusCode();
+//     $ctx->body = $r->getBody();
+// });
+
+$app->υse($router->routes());
+$app->listen(5000);
+```
+
+
 ### Template
 
 ```html
@@ -163,6 +237,7 @@ $app->listen(3000);
 ```
 ```php
 <?php
+//此处已省略 ... 
 
 //一维数组
 $router->get('/info', function(Context $ctx) {
@@ -191,6 +266,7 @@ $router->get('/info', function(Context $ctx) {
 ```
 ```php
 <?php
+//此处已省略 ... 
 
 //二维数组
 $router->get('/table', function(Context $ctx) {

@@ -5,6 +5,7 @@ use Naka507\Koa\CallCC;
 use Naka507\Koa\Any;
 use Naka507\Koa\AsyncTask;
 use Naka507\Socket\Timer;
+
 function spawn()
 {
     $n = func_num_args();
@@ -109,22 +110,7 @@ function async_sleep($ms){
 }
 
 function async_http_curl( $method,$host,$params = []){
-
-    return callcc( function($k) use($method,$host,$params){
-        $client = new Client();
-        $promise = $client->requestAsync($method, $host);
-        $promise->then(
-            function (ResponseInterface $res) {
-                $k(null);
-            },
-            function (RequestException $e) {
-                $k(null, $e);
-            }
-        );
-
-    });
-
-
+ 
 }
 
 function callcc(callable $fun, $timeout = 0)

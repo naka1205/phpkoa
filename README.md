@@ -86,6 +86,8 @@ $app->listen(3000);
 <?php
 require __DIR__ . '/vendor/autoload.php';
 
+define('DS', DIRECTORY_SEPARATOR);
+
 use Naka507\Koa\Application;
 use Naka507\Koa\Context;
 use Naka507\Koa\Error;
@@ -125,6 +127,27 @@ $router->delete('/demo3/(\d+)', function(Context $ctx, $next, $vars) {
     $ctx->body = "delete:demo3={$vars[0]}";
 });
 
+//文件上传
+$router->post('/files/(\d+)', function(Context $ctx, $next, $vars) {
+    $upload_path = __DIR__ . DS .  "uploads" . DS;
+    if ( !is_dir($upload_path) ) {
+        mkdir ($upload_path , 0777, true);
+    }
+    $files = [];
+    foreach ( $ctx->request->files as $key => $value) {
+        if ( !$value['file_name'] || !$value['file_data'] ) {
+            continue;
+        }
+        $file_path = $upload_path . $value['file_name'];
+        file_put_contents($file_path, $value['file_data']);
+        $value['file_path'] = $file_path;
+        $files[] = $value;
+    }
+
+    $ctx->status = 200;
+    $ctx->body = json_encode($files);
+});
+
 $app->υse($router->routes());
 
 $app->listen(3000);
@@ -146,34 +169,57 @@ $router = new Router();
 //http://127.0.0.1:5000/curl/put
 //http://127.0.0.1:5000/curl/delete
 $router->mount('/curl', function() use ($router) {
-
-    $router->get('/get', function( Context $ctx, $next ) {
+    $client = new Client();
+    $router->get('/get', function( Context $ctx, $next ) use ($client) {
         $client = new Client();
         $r = (yield $client->request('GET', 'http://127.0.0.1:3000/demo3/1'));
         $ctx->status = $r->getStatusCode();
         $ctx->body = $r->getBody();
     });
 
-    $router->get('/post', function(Context $ctx, $next ) {
+    $router->get('/post', function(Context $ctx, $next ) use ($client){
         $client = new Client();
         $r = (yield $client->request('POST', 'http://127.0.0.1:3000/demo3/2'));
         $ctx->status = $r->getStatusCode();
         $ctx->body = $r->getBody();
     });
 
-    $router->get('/put', function( Context $ctx, $next ) {
-        $client = new Client();
+    $router->get('/put', function( Context $ctx, $next ) use ($client){
+        
         $r = (yield $client->request('PUT', 'http://127.0.0.1:3000/demo3/3'));
         $ctx->status = $r->getStatusCode();
         $ctx->body = $r->getBody();
     });
 
-    $router->get('/delete', function( Context $ctx, $next ) {
-        $client = new Client();
+    $router->get('/delete', function( Context $ctx, $next ) use ($client){
         $r = (yield $client->request('DELETE', 'http://127.0.0.1:3000/demo3/4'));
         $ctx->status = $r->getStatusCode();
         $ctx->body = $r->getBody();
     });
+});
+
+//http://127.0.0.1:5000/files
+$router->get('/files', function(Context $ctx, $next ) {
+    $client = new Client();
+    $r = ( yield $client->request('POST', 'http://127.0.0.1:3000/files/2', [
+        'multipart' => [
+            [
+                'name'     => 'file_name',
+                'contents' => fopen( __DIR__ . '/file.txt', 'r')
+            ],
+            [
+                'name'     => 'other_file',
+                'contents' => 'hello',
+                'filename' => 'filename.txt',
+                'headers'  => [
+                    'X-Foo' => 'this is an extra header to include'
+                ]
+            ]
+        ]
+    ]));
+    
+    $ctx->status = $r->getStatusCode();
+    $ctx->body = $r->getBody();
 });
 
 // $router->get('/curl/(\w+)', function(Context $ctx, $next, $vars) {
@@ -187,7 +233,6 @@ $router->mount('/curl', function() use ($router) {
 $app->υse($router->routes());
 $app->listen(5000);
 ```
-
 
 ### Template
 
@@ -284,4 +329,54 @@ $router->get('/table', function(Context $ctx) {
     $ctx->state["table"] = $table;
     yield $ctx->render(__DIR__ . "/table.html");
 });
+```
+
+### Other
+=======
+静态文件处理 中间件 [PHPKoa Static](https://github.com/naka1205/phpkoa_static)
+=======
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PHPkoa Static</title>
+    <link rel="stylesheet" href="/css/default.css">
+</head>
+<body>
+    <img src="/images/20264902.jpg" />
+</body>
+</html>
+```
+```php
+<?php
+require __DIR__ . '/vendor/autoload.php';
+
+defined('DS') or define('DS', DIRECTORY_SEPARATOR);
+
+use Naka507\Koa\Application;
+use Naka507\Koa\Context;
+use Naka507\Koa\Error;
+use Naka507\Koa\Timeout;
+use Naka507\Koa\NotFound;
+use Naka507\Koa\Router;
+//静态文件处理 中间件
+use Naka507\Koa\StaticFiles; 
+
+$app = new Application();
+$app->υse(new Error());
+$app->υse(new Timeout(5));
+$app->υse(new NotFound()); 
+$app->υse(new StaticFiles(__DIR__ . DS .  "static" )); 
+
+$router = new Router();
+
+$router->get('/index', function(Context $ctx, $next) {
+    $ctx->status = 200;
+    yield $ctx->render(__DIR__ . "/index.html");
+});
+
+$app->υse($router->routes());
+
+$app->listen(3000);
 ```

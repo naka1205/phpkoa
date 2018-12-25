@@ -331,9 +331,10 @@ $router->get('/table', function(Context $ctx) {
 });
 ```
 
-### Other
-静态文件处理 中间件 [PHPKoa Static](https://github.com/naka1205/phpkoa_static)
+中间件
 =======
+静态文件处理 中间件 [PHPKoa Static](https://github.com/naka1205/phpkoa_static)
+
 ```html
 <!DOCTYPE html>
 <html lang="en">

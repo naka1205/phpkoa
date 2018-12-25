@@ -12,6 +12,10 @@ PHP异步编程:
 偶然间在 `GITHUB` 上看到有赞官方仓库的 [手把手教你实现co与Koa](https://github.com/youzan/php-co-koa) 。由于此前用过 `KOA` ，对于 `KOA` 的洋葱模型叹为观止。不由得心血来潮的看完了整个文档，接着 `CTRL+C`、`CTRL+V` 让代码跑了起来。
 文档中是基于 `swoole` 扩展进行开发，而 `swoole` 对 `WINDOWS` 并不友好，向来习惯在 `WINDOWS` 下开发的我一鼓作气，将[Workerman](https://github.com/walkor/Workerman) 改写并兼容了此项目。
 
+体验
+=======
+[PHPKoa Demo](https://github.com/naka1205/phpkoa_demo) 是使用 `PHPKoa` 开发 `HTTP SERVER` 的一个简单示例！
+
 安装
 =======
 ```
@@ -171,21 +175,18 @@ $router = new Router();
 $router->mount('/curl', function() use ($router) {
     $client = new Client();
     $router->get('/get', function( Context $ctx, $next ) use ($client) {
-        $client = new Client();
         $r = (yield $client->request('GET', 'http://127.0.0.1:3000/demo3/1'));
         $ctx->status = $r->getStatusCode();
         $ctx->body = $r->getBody();
     });
 
     $router->get('/post', function(Context $ctx, $next ) use ($client){
-        $client = new Client();
         $r = (yield $client->request('POST', 'http://127.0.0.1:3000/demo3/2'));
         $ctx->status = $r->getStatusCode();
         $ctx->body = $r->getBody();
     });
 
     $router->get('/put', function( Context $ctx, $next ) use ($client){
-        
         $r = (yield $client->request('PUT', 'http://127.0.0.1:3000/demo3/3'));
         $ctx->status = $r->getStatusCode();
         $ctx->body = $r->getBody();

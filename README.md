@@ -145,7 +145,7 @@ $router->delete('/demo3/(\d+)', function(Context $ctx, $next, $vars) {
     //清除所有 cookie
     $ctx->clearCookie();
     //清除所有 session
-    $ctx->clearCSession();
+    $ctx->clearSession();
     $ctx->status = 200;
     $ctx->body = "delete:demo3={$vars[0]}";
 });

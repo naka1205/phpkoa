@@ -46,7 +46,7 @@ $router->get('/clear/(\w+)', function(Context $ctx, $next, $vars) {
     if ( $vars[0] == 'cookies' ) {
         $ctx->clearCookie();
     }else{
-        $ctx->clearCSession();
+        $ctx->clearSession();
     }
     $ctx->status = 200;
     $ctx->body = 'OK';

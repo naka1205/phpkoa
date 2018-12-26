@@ -11,7 +11,7 @@
     "license": "MIT",
     "require": {
         "php": ">=5.4",
-        "naka1205/phpsocket": "^1.7",
+        "naka1205/phpsocket": "^1.9",
         "naka1205/phpkoa_static": "^1.1"
     },
     "autoload": {

@@ -119,14 +119,33 @@ $router->get('/demo4', function(Context $ctx, $next) {
 
 //RESTful API
 $router->post('/demo3/(\d+)', function(Context $ctx, $next, $vars) {
+    //设置 session
+    $ctx->setSession('demo3',$vars[0]);
+    //设置 cookie
+    $ctx->setCookie('demo3',$vars[0]);
     $ctx->status = 200;
     $ctx->body = "post:demo3={$vars[0]}";
 });
 $router->put('/demo3/(\d+)', function(Context $ctx, $next, $vars) {
+
+    //获取单个 cookie
+    $cookie_demo3 = $ctx->getCookie('demo3');
+    //或者
+    $cookies = $ctx->cookies['demo3'];
+
+    //获取单个 session
+    $session_demo3 = $ctx->getSession('demo3');
+    //或者
+    $session = $ctx->session['demo3'];
+
     $ctx->status = 200;
     $ctx->body = "put:demo3={$vars[0]}";
 });
 $router->delete('/demo3/(\d+)', function(Context $ctx, $next, $vars) {
+    //清除所有 cookie
+    $ctx->clearCookie();
+    //清除所有 session
+    $ctx->clearCSession();
     $ctx->status = 200;
     $ctx->body = "delete:demo3={$vars[0]}";
 });
@@ -152,6 +171,7 @@ $router->post('/files/(\d+)', function(Context $ctx, $next, $vars) {
     $ctx->body = json_encode($files);
 });
 
+
 $app->υse($router->routes());
 
 $app->listen(3000);
@@ -162,7 +182,7 @@ $app->listen(3000);
 <?php
 //此处已省略 ... 
 
-//此处使用第三方 HTTP 客户端类库，方便测试
+//使用第三方 HTTP 客户端类库，方便测试
 use GuzzleHttp\Client;
 
 $router = new Router();

@@ -14,8 +14,8 @@ PHP异步编程:
 
 体验
 =======
-[PHPKoa Demo](https://github.com/naka1205/phpkoa_demo) 是使用 `PHPKoa` 开发 `HTTP SERVER` 的一个简单示例！
-[PHP Krpano](https://github.com/naka1205/phpkrpano) PHP 全景图片生成！
+1. [PHPKoa Demo](https://github.com/naka1205/phpkoa_demo) 是使用 `PHPKoa` 开发 `HTTP SERVER` 的一个简单示例！
+2. [PHP Krpano](https://github.com/naka1205/phpkrpano) PHP 全景图片生成！
 
 安装
 =======

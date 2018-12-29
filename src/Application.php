@@ -21,11 +21,15 @@ class Application
         return $this;
     }
 
-    public function listen($port = 8000)
+    public function listen($port = 8000,callable $fn = null)
     {
         $this->fn = compose($this->middleware);
         $this->httpServer = new Server($port);
         
+        if ( $fn != null ) {
+            $this->httpServer->onWorkerStart = $fn;
+        }
+
         $this->httpServer->onConnect = [$this,'onConnect'];
         $this->httpServer->onMessage = [$this,'onRequest'];
         $this->httpServer->start();

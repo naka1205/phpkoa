@@ -41,7 +41,9 @@ $app->υse(function(Context $ctx) {
     $ctx->body = "<h1>Hello World</h1>";
 });
 
-$app->listen(3000);
+$app->listen(3000,function(){
+    echo "PHPKoa is listening in 3000\n";
+});
 
 ```
 ### Error

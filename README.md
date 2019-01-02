@@ -402,3 +402,81 @@ $app->υse($router->routes());
 
 $app->listen(3000);
 ```
+使用 第三方ORM
+```
+composer require topthink/think-orm
+```
+创建 MYSQL 数据表
+```mysql
+CREATE TABLE `too_user` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '用户ID',
+  `account` varchar(64) NOT NULL DEFAULT '' COMMENT '账号',
+  `password` char(32) NOT NULL DEFAULT '' COMMENT '登录密码',
+  `nickname` varchar(32) NOT NULL DEFAULT '' COMMENT '用户昵称',
+  `status` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '状态',
+  `create_time` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `update_time` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+```
+自定义数据模型
+```php
+<?php
+namespace Models;
+use think\Model;
+class User extends Model
+{
+}
+```
+自定义 JSON响应 中间件
+中间件会根据是否存在数据 响应不同的数据 并进行JSON格式化
+```php
+<?php
+namespace Middlewares;
+use Naka507\Koa\Middleware;
+use Naka507\Koa\Context;
+class BodyJson implements Middleware
+{
+    public function __construct(){
+    }
+    public function __invoke(Context $ctx, $next){
+        yield $next;
+        $pos = strpos($ctx->accept,'json');
+        if ( $pos !== false ) {
+            $ctx->type = 'application/json';
+            $result = [ "code" => 0,  "msg" => '操作失败'];
+            $data = $ctx->body;
+            if ( $data ) {
+                $result['code'] = 200;
+                $result['msg'] = '操作成功';
+                $result['data'] = $data;
+            }
+            $ctx->body = json_encode( $result );
+        }
+
+    }
+}
+```
+动态模板 使用JQ 进行AJAX 请求
+```html
+<body>
+    <h1>/api/user/{id}</h1>
+    <p id="user"></p>
+</body>
+<script type="text/javascript">
+var id = {id};
+$.ajax({
+    type: "GET",
+    url: "/api/user/" + id,
+    dataType: "json",
+    success: function(res){
+        if( res.code == 200 ){
+            $("#user").html(JSON.stringify(res.data))
+        }else{
+            $("#user").html(res.msg)
+        }
+        
+    }
+});
+</script>
+```

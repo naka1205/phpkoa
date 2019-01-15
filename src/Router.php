@@ -32,11 +32,19 @@ class Router
         $this->requestedMethod = $this->getRequestMethod();
 
         $handled = 0;
-        if (isset($this->afterRoutes[$this->requestedMethod])) {
-            $route = $this->handle($this->afterRoutes[$this->requestedMethod]);
-            $handled = $route['handled'];
+
+        if (isset($this->beforeRoutes[$this->requestedMethod])) {
+            $before = $this->handle($this->beforeRoutes[$this->requestedMethod]);
+            if ($before['handled'] != 0 && is_callable($before['fn'])) {
+                yield $before['fn']($ctx, $next, $before['vars']);
+                return;
+            }
         }
         
+        if (isset($this->afterRoutes[$this->requestedMethod])) {
+            $route = ( yield $this->handle($this->afterRoutes[$this->requestedMethod]) );
+            $handled = $route['handled'];
+        }
         switch ($handled) {
             case 0:
                 // 状态码写入Context

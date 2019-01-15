@@ -3,14 +3,12 @@ namespace Naka507\Koa;
 use Naka507\Socket\Timer;
 class Timeout implements Middleware
 {
-    public $timeout;
+    public $times;
     public $exception;
 
-    private $timerId;
-
-    public function __construct($timeout, \Exception $ex = null)
+    public function __construct($times, \Exception $ex = null)
     {
-        $this->timeout = $timeout;
+        $this->times = $times;
         if ($ex === null) {
             $this->exception = new HttpException(408, "Request timeout");
         } else {
@@ -22,8 +20,7 @@ class Timeout implements Middleware
     {
         yield race([
             callcc(function($k) {
-                $this->timerId = Timer::add($this->timeout, function() use($k) {
-                    $this->timerId = null;
+                Timer::add($this->times, function() use($k) {
                     $k(null, $this->exception);
                 },[],false);
             }),

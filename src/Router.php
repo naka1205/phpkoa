@@ -32,12 +32,16 @@ class Router
         $this->requestedMethod = $this->getRequestMethod();
 
         $handled = 0;
+        $quitAfterRun = false;
 
         if (isset($this->beforeRoutes[$this->requestedMethod])) {
             $before = $this->handle($this->beforeRoutes[$this->requestedMethod]);
             if ($before['handled'] != 0 && is_callable($before['fn'])) {
                 yield $before['fn']($ctx, $next, $before['vars']);
-                return;
+                // 状态码已写入 终止
+                if ( $ctx->status ) {
+                    return;
+                }
             }
         }
         

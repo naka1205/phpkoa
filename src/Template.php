@@ -264,6 +264,10 @@ class Template {
                     $tpl->$key = $value;
                     continue;
                 }
+                if ( sizeof($value) <= 0 ) {
+                    $tpl->block(strtoupper($key). '_EMPTY');
+                    continue;
+                }
                 $bool = false;
                 foreach($value as $ke => $val){
                     if ( !is_array($val) ) {

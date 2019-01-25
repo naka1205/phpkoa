@@ -7,13 +7,18 @@ class Context
     public $response;
     public $req;
     public $res;
+    public $funcs = [];
     public $state = [];
     public $respond = true;
     public $body;
+    public $view;
     public $status;
 
     public function __call($name, $arguments)
     {
+        if(array_key_exists($name, $this->funcs)){
+            return $this->funcs[$name][1](...$arguments);
+        }
         $fn = [$this->response, $name];
         return $fn(...$arguments);
     }
@@ -26,6 +31,10 @@ class Context
     public function __set($name, $value)
     {
         $this->response->$name = $value;
+    }
+
+    public function add($func, $callback){
+        $this->funcs[$func] = array($func, $callback);
     }
  
     public function accept($name)

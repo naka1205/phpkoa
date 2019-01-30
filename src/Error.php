@@ -17,9 +17,9 @@ class Error implements Middleware
             }
 
             $err = [ "code" => $code,  "msg" => $msg ];
-            if ($ctx->accept("json")) {
+            if ( $ctx->accept("json") ) {
                 $ctx->status = 200;
-                $ctx->body = $err;
+                $ctx->body = json_encode($err);
             } else {
                 $ctx->status = $status;
                 if ($status === 404) {

@@ -4,16 +4,16 @@ namespace Naka507\Koa;
 class Router
 {
 
+    protected $notFoundCallback;
+
     private $afterRoutes = array();
     private $beforeRoutes = array();
-    protected $notFoundCallback;
+    
     private $baseRoute = '';
     private $requestedMethod = '';
     private $serverBasePath;
-    private $namespace = '';
 
-
-    public $dispatcher;
+    private $suffix = '';
 
     public function __construct()
     {
@@ -68,6 +68,7 @@ class Router
 
     public function before($methods, $pattern, $fn)
     {
+        $pattern .= $this->suffix;
         $pattern = $this->baseRoute.'/'.trim($pattern, '/');
         $pattern = $this->baseRoute ? rtrim($pattern, '/') : $pattern;
         foreach (explode('|', $methods) as $method) {
@@ -80,6 +81,7 @@ class Router
 
     public function match($methods, $pattern, $fn)
     {
+        $pattern .= $this->suffix;
         $pattern = $this->baseRoute.'/'.trim($pattern, '/');
         $pattern = $this->baseRoute ? rtrim($pattern, '/') : $pattern;
         foreach (explode('|', $methods) as $method) {
@@ -131,6 +133,11 @@ class Router
         $this->baseRoute .= $baseRoute;
         call_user_func($fn);
         $this->baseRoute = $curBaseRoute;
+    }
+
+    public function suffix($str = '')
+    {
+        $this->suffix = $str;
     }
 
     public function getRequestHeaders()

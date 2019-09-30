@@ -17,6 +17,7 @@ PHP异步编程:
 1. [PHPKoa Demo](https://github.com/naka1205/phpkoa_demo) 是使用 `PHPKoa` 开发 `HTTP SERVER` 的一个简单示例！
 2. [PHP Krpano](https://github.com/naka1205/phpkrpano) PHP 全景图片生成！
 3. [PKBook](https://github.com/naka1205/pkbook) 静态博客发布程序！
+4. [H5Make](https://github.com/naka1205/H5Make) H5编辑器！
 
 安装
 =======

@@ -19,6 +19,10 @@ PHP异步编程:
 3. [PKBook](https://github.com/naka1205/pkbook) 静态博客发布程序！
 4. [H5Make](https://github.com/naka1205/H5Make) H5编辑器！
 
+建议
+=======
+欢迎各位大神提交[issues](https://github.com/naka1205/phpkoa/issues/1) 
+
 安装
 =======
 ```
